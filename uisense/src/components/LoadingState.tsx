@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Camera, Brain, Paintbrush, CheckCircle2 } from 'lucide-react';
+import { Globe, Camera, Brain, Paintbrush, CheckCircle2, Scan } from 'lucide-react';
 
 interface LoadingStateProps {
   url: string;
 }
 
 const steps = [
-  { icon: Globe, label: 'Loading website...', duration: 4000 },
-  { icon: Camera, label: 'Capturing screenshot...', duration: 3000 },
-  { icon: Brain, label: 'Analyzing with design literature...', duration: 15000 },
-  { icon: Paintbrush, label: 'Generating UI improvements...', duration: 8000 },
-  { icon: CheckCircle2, label: 'Preparing results...', duration: 3000 },
+  { icon: Globe, label: 'Loading website', duration: 4000 },
+  { icon: Camera, label: 'Capturing screenshot', duration: 3000 },
+  { icon: Brain, label: 'Analyzing against design literature', duration: 15000 },
+  { icon: Paintbrush, label: 'Generating UI improvements', duration: 8000 },
+  { icon: CheckCircle2, label: 'Preparing results', duration: 3000 },
 ];
 
 export default function LoadingState({ url }: LoadingStateProps) {
@@ -20,12 +20,10 @@ export default function LoadingState({ url }: LoadingStateProps) {
   useEffect(() => {
     let elapsed = 0;
     const timers: NodeJS.Timeout[] = [];
-
     for (let i = 1; i < steps.length; i++) {
       elapsed += steps[i - 1].duration;
       timers.push(setTimeout(() => setCurrentStep(i), elapsed));
     }
-
     return () => timers.forEach(clearTimeout);
   }, []);
 
@@ -35,40 +33,31 @@ export default function LoadingState({ url }: LoadingStateProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
-      className="min-h-screen flex flex-col items-center justify-center px-4"
+      className="min-h-screen flex flex-col items-center justify-center px-6"
     >
-      <div className="max-w-lg w-full text-center">
-        {/* Animated orb */}
-        <div className="relative w-32 h-32 mx-auto mb-10">
+      <div className="max-w-sm w-full">
+        {/* Animated icon */}
+        <div className="flex justify-center mb-10">
           <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute inset-0 rounded-full bg-indigo-500/20 blur-xl"
-          />
-          <motion.div
-            animate={{ scale: [1.1, 0.9, 1.1], opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-            className="absolute inset-4 rounded-full bg-violet-500/20 blur-lg"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+            className="relative"
+          >
+            <div className="w-14 h-14 rounded-xl bg-indigo-500 flex items-center justify-center">
+              <Scan className="w-7 h-7 text-white" strokeWidth={2} />
+            </div>
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-              className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30"
-            >
-              {(() => {
-                const Icon = steps[currentStep].icon;
-                return <Icon className="w-8 h-8 text-white" />;
-              })()}
-            </motion.div>
-          </div>
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute -inset-4 rounded-2xl bg-indigo-500/10 blur-xl -z-10"
+            />
+          </motion.div>
         </div>
 
-        <h2 className="text-xl font-semibold text-white mb-2">Analyzing Design</h2>
-        <p className="text-sm text-gray-500 mb-8 font-mono truncate px-4">{url}</p>
+        <p className="text-center text-xs text-gray-600 font-mono mb-8 truncate">{url}</p>
 
-        {/* Steps */}
-        <div className="space-y-3 text-left max-w-sm mx-auto">
+        {/* Steps — minimal list */}
+        <div className="space-y-3">
           {steps.map((step, i) => {
             const isActive = i === currentStep;
             const isDone = i < currentStep;
@@ -76,42 +65,38 @@ export default function LoadingState({ url }: LoadingStateProps) {
             return (
               <motion.div
                 key={step.label}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: isDone || isActive ? 1 : 0.3, x: 0 }}
-                transition={{ delay: i * 0.1 }}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: isDone || isActive ? 1 : 0.25, x: 0 }}
+                transition={{ delay: i * 0.08 }}
                 className="flex items-center gap-3"
               >
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                  className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 transition-colors ${
                     isDone
-                      ? 'bg-green-500/20 text-green-400'
+                      ? 'bg-emerald-500/10 text-emerald-400'
                       : isActive
-                        ? 'bg-indigo-500/20 text-indigo-400'
-                        : 'bg-dark-800 text-gray-600'
+                        ? 'bg-indigo-500/10 text-indigo-400'
+                        : 'text-gray-700'
                   }`}
                 >
                   {isDone ? (
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   ) : (
-                    <step.icon className="w-4 h-4" />
+                    <step.icon className="w-3.5 h-3.5" />
                   )}
                 </div>
                 <span
-                  className={`text-sm ${
-                    isDone
-                      ? 'text-green-400'
-                      : isActive
-                        ? 'text-white'
-                        : 'text-gray-600'
+                  className={`text-xs ${
+                    isDone ? 'text-emerald-400/70' : isActive ? 'text-white' : 'text-gray-700'
                   }`}
                 >
                   {step.label}
                 </span>
                 {isActive && (
                   <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="w-1.5 h-1.5 rounded-full bg-indigo-400 ml-auto"
+                    className="w-1 h-1 rounded-full bg-indigo-400 ml-auto"
                   />
                 )}
               </motion.div>

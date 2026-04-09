@@ -7,76 +7,68 @@ interface ChangeCardProps {
   index: number;
 }
 
-const impactConfig = {
-  critical: { color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', label: 'Critical' },
-  high: { color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/20', label: 'High' },
-  medium: { color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', label: 'Medium' },
-  low: { color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20', label: 'Low' },
+const impactColors: Record<string, string> = {
+  critical: 'text-red-400',
+  high: 'text-orange-400',
+  medium: 'text-yellow-400',
+  low: 'text-blue-400',
 };
 
 function ImpactIcon({ impact }: { impact: string }) {
-  switch (impact) {
-    case 'critical':
-      return <AlertTriangle className="w-3.5 h-3.5" />;
-    case 'high':
-      return <ArrowUp className="w-3.5 h-3.5" />;
-    default:
-      return <Minus className="w-3.5 h-3.5" />;
-  }
+  const cls = `w-3 h-3 ${impactColors[impact] || 'text-gray-500'}`;
+  if (impact === 'critical') return <AlertTriangle className={cls} />;
+  if (impact === 'high') return <ArrowUp className={cls} />;
+  return <Minus className={cls} />;
 }
 
 export default function ChangeCard({ change, index }: ChangeCardProps) {
-  const impact = impactConfig[change.impact] || impactConfig.medium;
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 + index * 0.08 }}
-      className="glass-card rounded-xl p-5 hover:bg-dark-800/40 transition-colors"
+      transition={{ delay: 0.05 + index * 0.06 }}
+      className="group p-4 rounded-lg border border-white/[0.04] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.08] transition-all"
     >
-      <div className="flex items-start justify-between mb-3">
+      {/* Header row */}
+      <div className="flex items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-gray-500">#{index + 1}</span>
-          <h3 className="text-sm font-semibold text-white">{change.component}</h3>
+          <span className="text-[10px] font-mono text-gray-600">{String(index + 1).padStart(2, '0')}</span>
+          <h3 className="text-sm font-display font-semibold text-white">{change.component}</h3>
         </div>
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${impact.bg} ${impact.color} ${impact.border} border`}>
-          <ImpactIcon impact={change.impact} />
-          {impact.label}
-        </span>
+        <ImpactIcon impact={change.impact} />
       </div>
 
-      <p className="text-sm text-gray-400 mb-2">
-        <span className="text-red-400/70 font-medium">Issue: </span>
+      {/* Issue → Fix */}
+      <p className="text-xs text-gray-500 mb-1.5 leading-relaxed">
         {change.issue}
       </p>
-
-      <p className="text-sm text-gray-300 mb-3">
-        <span className="text-green-400/70 font-medium">Fix: </span>
+      <p className="text-xs text-gray-300 mb-3 leading-relaxed">
         {change.recommendation}
       </p>
 
-      {/* CSS change preview */}
-      <div className="bg-dark-950/60 rounded-lg p-3 mb-3 font-mono text-xs overflow-x-auto">
+      {/* CSS */}
+      <div className="bg-black/30 rounded-md px-3 py-2 mb-3 font-mono text-[11px] leading-relaxed overflow-x-auto">
         <span className="text-indigo-400">{change.cssSelector}</span>
-        <span className="text-gray-500"> {'{'} </span>
-        <br />
+        <span className="text-gray-600"> {'{ '}</span>
         {change.cssChanges.split(';').filter(Boolean).map((prop, i) => (
-          <div key={i} className="pl-4">
-            <span className="text-emerald-400">{prop.trim()}</span>
-            <span className="text-gray-500">;</span>
-          </div>
+          <span key={i}>
+            <span className="text-emerald-400/80">{prop.trim()}</span>
+            <span className="text-gray-600">; </span>
+          </span>
         ))}
-        <span className="text-gray-500">{'}'}</span>
+        <span className="text-gray-600">{'}'}</span>
       </div>
 
-      {/* Citation */}
-      <div className="flex items-start gap-2 text-xs text-gray-500">
-        <BookOpen className="w-3.5 h-3.5 mt-0.5 text-indigo-400/60 shrink-0" />
-        <div>
-          <span className="text-indigo-400/80 font-medium">{change.principle}</span>
-          {change.source && <span className="text-gray-600"> — {change.source}</span>}
-        </div>
+      {/* Citation — subtle, always visible */}
+      <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
+        <BookOpen className="w-3 h-3 text-indigo-500/50" />
+        <span className="text-indigo-400/60">{change.principle}</span>
+        {change.source && (
+          <>
+            <span className="text-gray-700">·</span>
+            <span className="truncate">{change.source}</span>
+          </>
+        )}
       </div>
     </motion.div>
   );
