@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Camera, Brain, Paintbrush, CheckCircle2, Scan } from 'lucide-react';
+import { Globe, Camera, Brain, Paintbrush, CheckCircle2 } from 'lucide-react';
 
 interface LoadingStateProps {
   url: string;
@@ -36,27 +36,23 @@ export default function LoadingState({ url }: LoadingStateProps) {
       className="min-h-screen flex flex-col items-center justify-center px-6"
     >
       <div className="max-w-sm w-full">
-        {/* Animated icon */}
+        {/* Spinner */}
         <div className="flex justify-center mb-10">
           <motion.div
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-            className="relative"
           >
-            <div className="w-14 h-14 rounded-xl bg-indigo-500 flex items-center justify-center">
-              <Scan className="w-7 h-7 text-white" strokeWidth={2} />
+            <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center shadow-card">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
             </div>
-            <motion.div
-              animate={{ opacity: [0.2, 0.5, 0.2] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute -inset-4 rounded-2xl bg-indigo-500/10 blur-xl -z-10"
-            />
           </motion.div>
         </div>
 
-        <p className="text-center text-xs text-gray-600 font-mono mb-8 truncate">{url}</p>
+        <p className="text-center text-xs text-ink-dim font-mono mb-8 truncate">{url}</p>
 
-        {/* Steps — minimal list */}
         <div className="space-y-3">
           {steps.map((step, i) => {
             const isActive = i === currentStep;
@@ -66,17 +62,17 @@ export default function LoadingState({ url }: LoadingStateProps) {
               <motion.div
                 key={step.label}
                 initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: isDone || isActive ? 1 : 0.25, x: 0 }}
+                animate={{ opacity: isDone || isActive ? 1 : 0.3, x: 0 }}
                 transition={{ delay: i * 0.08 }}
                 className="flex items-center gap-3"
               >
                 <div
-                  className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 transition-colors ${
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     isDone
-                      ? 'bg-emerald-500/10 text-emerald-400'
+                      ? 'bg-sage/10 text-sage'
                       : isActive
-                        ? 'bg-indigo-500/10 text-indigo-400'
-                        : 'text-gray-700'
+                        ? 'bg-accent/10 text-accent'
+                        : 'text-ink-dim'
                   }`}
                 >
                   {isDone ? (
@@ -86,8 +82,8 @@ export default function LoadingState({ url }: LoadingStateProps) {
                   )}
                 </div>
                 <span
-                  className={`text-xs ${
-                    isDone ? 'text-emerald-400/70' : isActive ? 'text-white' : 'text-gray-700'
+                  className={`text-xs font-medium ${
+                    isDone ? 'text-sage' : isActive ? 'text-ink' : 'text-ink-dim'
                   }`}
                 >
                   {step.label}
@@ -96,7 +92,7 @@ export default function LoadingState({ url }: LoadingStateProps) {
                   <motion.div
                     animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="w-1 h-1 rounded-full bg-indigo-400 ml-auto"
+                    className="w-1.5 h-1.5 rounded-full bg-accent ml-auto"
                   />
                 )}
               </motion.div>

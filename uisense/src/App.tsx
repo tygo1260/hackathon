@@ -10,6 +10,7 @@ export interface DesignChange {
   recommendation: string;
   cssSelector: string;
   cssChanges: string;
+  contentChange?: string;
   principle: string;
   source: string;
   impact: 'critical' | 'high' | 'medium' | 'low';
@@ -40,7 +41,8 @@ export default function App() {
     setError('');
 
     try {
-      const response = await fetch('/api/analyze', {
+      const apiBase = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiBase}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
@@ -52,6 +54,11 @@ export default function App() {
       }
 
       const data: AnalysisResult = await response.json();
+
+      if (!data.changes || data.changes.length === 0 || !data.cssOverrides?.trim()) {
+        throw new Error('The analysis didn\'t produce enough changes. Try a different URL or retry.');
+      }
+
       setResult(data);
       setState('results');
     } catch (err) {

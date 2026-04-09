@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Scan, BookOpen, Eye, Zap } from 'lucide-react';
+import { ArrowRight, Eye, BookOpen, Zap } from 'lucide-react';
+import BookWall from './BookWall';
 
 interface HeroProps {
   onAnalyze: (url: string) => void;
@@ -40,101 +41,89 @@ export default function Hero({ onAnalyze, initialError }: HeroProps) {
       transition={{ duration: 0.5 }}
       className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
     >
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-        }}
-      />
+      <BookWall />
 
-      {/* Single focused glow — not scattered blobs */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-indigo-600/8 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="relative z-10 max-w-2xl w-full">
-        {/* Brand */}
+      <div className="relative z-10 max-w-[520px] w-full">
+        {/* Card */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16"
+          className="w-full p-10 pb-9 rounded-card bg-white/94 backdrop-blur-[28px] border border-black/[0.06] shadow-card flex flex-col gap-5"
         >
-          <div className="inline-flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center">
-              <Scan className="w-5 h-5 text-white" strokeWidth={2.5} />
-            </div>
-            <span className="font-display text-lg font-semibold tracking-tight text-white/90">UISense</span>
-          </div>
-
-          <h1 className="font-display text-5xl sm:text-6xl font-bold tracking-tight text-white leading-[1.1] mb-5">
-            Renovate any website<br />
-            <span className="text-indigo-400">with design science</span>
+          <h1 className="font-display text-[clamp(28px,5vw,38px)] font-extrabold leading-[1.1] tracking-[-1.5px] text-center text-ink">
+            Renovate with{' '}
+            <em className="font-serif font-normal italic text-accent">design science</em>
           </h1>
 
-          <p className="text-base text-gray-500 max-w-md mx-auto leading-relaxed">
-            Paste a URL. Get specific UI improvements grounded in
-            Nielsen, Gestalt, and Laws of UX — with before/after proof.
+          <p className="text-[15px] font-medium text-ink-muted text-center">
+            Paste a website URL for an evidence-based redesign
           </p>
-        </motion.div>
 
-        {/* Input — the dominant interaction */}
-        <motion.form
-          onSubmit={handleSubmit}
-          initial={{ y: 16, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16"
-        >
-          <div className="flex items-center bg-white/[0.04] rounded-xl border border-white/[0.06] overflow-hidden transition-colors focus-within:border-indigo-500/40 focus-within:bg-white/[0.06]">
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => { setUrl(e.target.value); setError(''); }}
-              placeholder="https://example.com"
-              className="flex-1 bg-transparent px-5 py-4 text-[15px] text-white placeholder-gray-600 focus:outline-none font-mono"
-              autoFocus
-            />
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="border border-cream-300 rounded-[10px] overflow-hidden transition-all focus-within:border-accent focus-within:shadow-[0_0_0_3px_rgba(38,78,112,0.08)] bg-white">
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => { setUrl(e.target.value); setError(''); }}
+                placeholder="https://example.com"
+                className="w-full px-3.5 py-2.5 font-mono text-[13px] text-ink bg-transparent border-none outline-none placeholder:text-ink-dim"
+                autoFocus
+                spellCheck={false}
+                autoComplete="off"
+              />
+            </div>
+
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-beni text-xs -mt-1"
+              >
+                {error}
+              </motion.p>
+            )}
+
             <button
               type="submit"
-              className="m-1.5 px-5 py-2.5 bg-indigo-500 rounded-lg text-white text-sm font-semibold flex items-center gap-2 hover:bg-indigo-400 transition-colors"
+              className="relative w-full py-[18px] px-7 text-[17px] font-bold font-display text-white bg-ink rounded-[14px] shadow-[0_4px_20px_rgba(0,0,0,0.18)] transition-all hover:-translate-y-px hover:shadow-[0_6px_24px_rgba(0,0,0,0.22)] active:translate-y-0 overflow-hidden"
             >
-              Analyze
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Get Your Audit
+                <ArrowRight className="w-4 h-4" />
+              </span>
             </button>
-          </div>
+          </form>
+        </motion.div>
 
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-400/80 text-xs mt-2.5 pl-1"
-            >
-              {error}
-            </motion.p>
-          )}
-        </motion.form>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-xs font-medium text-ink-dim text-center mt-5 tracking-wide"
+        >
+          Backed by 74 principles · 30 patterns · 89 tokens from real design books
+        </motion.p>
 
-        {/* Trust row — not cards, just inline facts */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="flex items-center justify-center gap-8 text-xs text-gray-600"
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-6 mt-6 text-xs text-ink-dim"
         >
           <span className="flex items-center gap-1.5">
-            <Eye className="w-3.5 h-3.5 text-gray-500" />
+            <Eye className="w-3.5 h-3.5" />
             Visual analysis
           </span>
-          <span className="w-px h-3 bg-gray-800" />
+          <span className="w-px h-3 bg-cream-300" />
           <span className="flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5 text-gray-500" />
-            70+ design principles
+            <BookOpen className="w-3.5 h-3.5" />
+            Literature-backed
           </span>
-          <span className="w-px h-3 bg-gray-800" />
+          <span className="w-px h-3 bg-cream-300" />
           <span className="flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5 text-gray-500" />
-            Before / after proof
+            <Zap className="w-3.5 h-3.5" />
+            Before / after
           </span>
         </motion.div>
       </div>

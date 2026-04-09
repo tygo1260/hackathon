@@ -48,13 +48,12 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }: BeforeAft
   return (
     <div
       ref={containerRef}
-      className="relative w-full rounded-xl overflow-hidden cursor-col-resize select-none border border-dark-700/50 shadow-2xl shadow-black/30"
+      className="relative w-full rounded-2xl overflow-hidden cursor-col-resize select-none border border-cream-300 shadow-card"
       style={{ aspectRatio: '16 / 10' }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      {/* After image (full background) */}
       <img
         src={afterImage}
         alt="After redesign"
@@ -62,7 +61,6 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }: BeforeAft
         draggable={false}
       />
 
-      {/* Before image (clipped from left) */}
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ width: `${sliderPosition}%` }}
@@ -81,20 +79,20 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }: BeforeAft
         className="absolute top-0 bottom-0 z-10 pointer-events-none"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        <div className="absolute inset-0 w-0.5 bg-white/90 mx-auto" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-xl shadow-black/40 flex items-center justify-center pointer-events-auto">
+        <div className="absolute inset-0 w-0.5 bg-ink/40 mx-auto" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-card flex items-center justify-center pointer-events-auto border border-cream-300">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M6 4L3 9L6 14" stroke="#4f46e5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M12 4L15 9L12 14" stroke="#4f46e5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6 4L3 9L6 14" stroke="#264E70" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M12 4L15 9L12 14" stroke="#264E70" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 px-3 py-1.5 rounded-lg bg-black/70 backdrop-blur-sm text-xs font-bold tracking-wider text-white/90 z-20 uppercase">
+      <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-ink/70 backdrop-blur-sm text-[11px] font-bold tracking-wider text-white z-20 uppercase">
         Before
       </div>
-      <div className="absolute top-4 right-4 px-3 py-1.5 rounded-lg bg-indigo-600/90 backdrop-blur-sm text-xs font-bold tracking-wider text-white z-20 uppercase">
+      <div className="absolute top-3 right-3 px-3 py-1 rounded-lg bg-accent/90 backdrop-blur-sm text-[11px] font-bold tracking-wider text-white z-20 uppercase">
         After
       </div>
     </div>

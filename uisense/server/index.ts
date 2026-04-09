@@ -207,7 +207,20 @@ app.post('/api/analyze', async (req, res) => {
     );
 
     console.log(`[UISense] Found ${analysis.changes.length} design improvements`);
-    console.log('[UISense] Step 6/6: Applying CSS improvements & capturing results...');
+    console.log('[UISense] Step 6/6: Applying redesign & capturing results...');
+
+    // Inject content changes (JavaScript) first, before CSS
+    if (analysis.jsOverrides) {
+      try {
+        await page.evaluate((js: string) => {
+          try { eval(js); } catch (e) { console.warn('UISense JS override error:', e); }
+        }, analysis.jsOverrides);
+        console.log(`[UISense] Applied JS content overrides (${analysis.jsOverrides.length} chars)`);
+        await new Promise((r) => setTimeout(r, 500));
+      } catch (err) {
+        console.log(`[UISense] JS override injection failed (non-fatal): ${err}`);
+      }
+    }
 
     if (analysis.cssOverrides) {
       await page.evaluate((css: string) => {

@@ -4,29 +4,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: {
-          50: '#e6e6ef',
-          100: '#c2c2d6',
-          200: '#9999b3',
-          300: '#70708f',
-          400: '#52527a',
-          500: '#333366',
-          600: '#2e2e5e',
-          700: '#272753',
-          800: '#1f1f49',
-          900: '#141438',
-          950: '#0a0a1a',
+        cream: {
+          50: '#FDFCF9',
+          100: '#F5F2EB',
+          200: '#EDE8DC',
+          300: '#e0dbd0',
+          400: '#d5d0c5',
+        },
+        ink: {
+          DEFAULT: '#1a1a1a',
+          muted: '#6b6b6b',
+          dim: '#9b9b9b',
         },
         accent: {
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
+          DEFAULT: '#264E70',
+          warm: '#B87333',
         },
+        beni: '#9B4E4E',
+        sage: '#5B7553',
       },
       fontFamily: {
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Sora', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+        serif: ['Noto Serif JP', 'Instrument Serif', 'Georgia', 'serif'],
+        mono: ['Space Mono', 'monospace'],
+      },
+      borderRadius: {
+        card: '22px',
+      },
+      boxShadow: {
+        card: '0 8px 60px rgba(0,0,0,0.10), 0 2px 12px rgba(0,0,0,0.06)',
+        'card-hover': '0 12px 80px rgba(0,0,0,0.13), 0 4px 20px rgba(0,0,0,0.08)',
       },
     },
   },
