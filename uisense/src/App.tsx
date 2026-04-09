@@ -23,6 +23,7 @@ export interface AnalysisResult {
   overallScoreAfter: number;
   changes: DesignChange[];
   cssOverrides: string;
+  componentScreenshots: Record<string, string>;
 }
 
 type AppState = 'input' | 'loading' | 'results' | 'error';

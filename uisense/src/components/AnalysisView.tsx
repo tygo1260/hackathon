@@ -95,16 +95,16 @@ export default function AnalysisView({ result, url, onReset }: AnalysisViewProps
           initial={{ y: 16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="flex items-start gap-10 mb-12"
+          className="flex flex-col lg:flex-row items-start gap-8 mb-12"
         >
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h1 className="font-display text-2xl font-bold text-white mb-3 tracking-tight">
               Analysis Complete
             </h1>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-xl">{result.summary}</p>
+            <p className="text-sm text-gray-400 leading-relaxed">{result.summary}</p>
           </div>
 
-          <div className="flex items-center gap-5 shrink-0 pt-1">
+          <div className="flex items-center gap-5 shrink-0">
             <ScoreRing score={result.overallScoreBefore} label="Before" color="#ef4444" />
             <div className="flex flex-col items-center gap-0.5">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -147,9 +147,14 @@ export default function AnalysisView({ result, url, onReset }: AnalysisViewProps
               {result.changes.length} improvements
             </span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="flex flex-col gap-3">
             {result.changes.map((change, i) => (
-              <ChangeCard key={i} change={change} index={i} />
+              <ChangeCard
+                key={i}
+                change={change}
+                index={i}
+                componentScreenshot={result.componentScreenshots?.[i.toString()]}
+              />
             ))}
           </div>
         </motion.section>
